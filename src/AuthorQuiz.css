@@ -1,0 +1,28 @@
+.AuthorQuiz {
+  text-align: center;
+}
+
+.AuthorQuiz-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.AuthorQuiz-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.AuthorQuiz-title {
+  font-size: 1.5em;
+}
+
+.AuthorQuiz-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
