@@ -38,36 +38,36 @@ const authors = [
 ]
 
 function getTurnData(){
-    const selectedAuthor_ = sample(authors);
-    const answer_ = sample(shuffle(selectedAuthor_.books));
-    const allBooks_ = authors
-                        .filter(author => {return selectedAuthor_ !== author})
+    const selectedAuthor = sample(authors);
+    const answer = sample(shuffle(selectedAuthor.books));
+    const allBooks = authors
+                        .filter(author => {return selectedAuthor !== author})
                         .reduce(function(p, c, i){
                             return p.concat(c.books); }, []
                         );
-    const fourRandomBooks_ = shuffle(allBooks_).slice(0,3);
-    fourRandomBooks_.push(answer_);
-        
-    
-    const allBooks = authors.reduce(function(p, c, i){
-        return p.concat(c.books);
-    }, []);
-
-    const fourRandomBooks = shuffle(allBooks).slice(0,4);
-    const answer = sample(fourRandomBooks);
-
-
-
+    const fourRandomBooks = shuffle(allBooks).slice(0,3);
+    fourRandomBooks.push(answer);
 
     return {
-        books: fourRandomBooks_,
-        author: selectedAuthor_
+        books: fourRandomBooks,
+        author: selectedAuthor
     }
 }
 
 const state = {
-    turnData: getTurnData(authors)
+    turnData: getTurnData(authors),
+    highlight: ''
 }
 
-ReactDOM.render(<AuthorQuiz {...state} />, document.getElementById('root'));
+function onAnswerSelected(answer){
+    const isCorrect = state.turnData.author.books.some((book) => book === answer);
+    state.highlight = isCorrect ? 'correct' : 'wrong';
+    render();
+}
+
+function render(){
+    ReactDOM.render(<AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />, document.getElementById('root'));
+}
+
+render();
 registerServiceWorker();
