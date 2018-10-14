@@ -44,7 +44,7 @@ function Turn({author, books, highlight, onAnswerSelected}){
   </div>);
 }
 
-Turn.PropTypes = {
+Turn.propTypes = {
   author: PropTypes.shape({
     name: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
@@ -52,7 +52,7 @@ Turn.PropTypes = {
     books: PropTypes.arrayOf(PropTypes.string).isRequired
   }),
   books: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onAnswerSelected: PropTypes.string.isRequired,
+  onAnswerSelected: PropTypes.func.isRequired,
   highlight: PropTypes.string.isRequired
 }
 
