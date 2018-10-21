@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import './index.css';
 import './bootstrap.min.css'
 import AuthorQuiz from './AuthorQuiz';
@@ -65,8 +66,26 @@ function onAnswerSelected(answer){
     render();
 }
 
+function App(){
+    return ( <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} /> );
+}
+
+function FutureForm({match}) {
+    return <div>
+        <h1>Future Form</h1>
+        <p>{JSON.stringify(match)}</p>
+    </div>;
+}
+
 function render(){
-    ReactDOM.render(<AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />, document.getElementById('root'));
+    ReactDOM.render(
+    <BrowserRouter>
+        <React.Fragment>
+            <Route exact path="/" component={App} />
+            <Route path="/add" component={FutureForm} />
+        </React.Fragment>
+    </BrowserRouter>, 
+    document.getElementById('root'));
 }
 
 render();
