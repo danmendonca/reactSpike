@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, withRouter} from 'react-router-dom';
 import './index.css';
 import './bootstrap.min.css'
 import AuthorQuiz from './AuthorQuiz';
+import AddAuthorForm from './AddAuthorForm';
 import registerServiceWorker from './registerServiceWorker';
 import {shuffle, sample} from 'underscore';
 
@@ -46,19 +47,16 @@ function getTurnData(){
                         .reduce(function(p, c, i){
                             return p.concat(c.books); }, []
                         );
-    const fourRandomBooks = shuffle(allBooks).slice(0,3);
+    let fourRandomBooks = shuffle(allBooks).slice(0,3);
     fourRandomBooks.push(answer);
-
+    fourRandomBooks = shuffle(fourRandomBooks);                        
     return {
         books: fourRandomBooks,
         author: selectedAuthor
     }
 }
 
-const state = {
-    turnData: getTurnData(authors),
-    highlight: ''
-}
+let state = resetState();
 
 function onAnswerSelected(answer){
     const isCorrect = state.turnData.author.books.some((book) => book === answer);
@@ -66,23 +64,36 @@ function onAnswerSelected(answer){
     render();
 }
 
-function App(){
-    return ( <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} /> );
+function resetState(){
+    return {
+        turnData: getTurnData(authors),
+        highlight: '',        
+    };
 }
 
-function FutureForm({match}) {
-    return <div>
-        <h1>Future Form</h1>
-        <p>{JSON.stringify(match)}</p>
-    </div>;
+function onContinueHandle(){
+    state = resetState();
+    render();
 }
+
+function App(){
+    return ( <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} onContinueHandle={onContinueHandle} /> );
+}
+
+const AuthorWrapper = withRouter(({ history }) =>
+    <AddAuthorForm onAddAuthor={(author) => {
+        authors.push(author);
+        history.push('/');
+    }} />
+);
+    
 
 function render(){
     ReactDOM.render(
     <BrowserRouter>
         <React.Fragment>
             <Route exact path="/" component={App} />
-            <Route path="/add" component={FutureForm} />
+            <Route path="/add" component={AuthorWrapper} />
         </React.Fragment>
     </BrowserRouter>, 
     document.getElementById('root'));
